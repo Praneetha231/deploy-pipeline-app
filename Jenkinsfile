@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
-        IMAGE_NAME = "yourdockerhubuser/deploy-pipeline-app"
+        IMAGE_NAME = "praneetha2305/deploy-pipeline-app"
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         KUBECONFIG_CRED = credentials('kubeconfig')
     }
@@ -12,7 +12,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/yourusername/deploy-pipeline-app.git'
+                git branch: 'main', url: 'https://github.com/Praneetha231/deploy-pipeline-app.git'
             }
         }
 
