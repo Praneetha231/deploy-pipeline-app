@@ -1,0 +1,35 @@
+{
+  "info": {
+    "name": "Deploy Pipeline App - API Validation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://<EC2_PUBLIC_IP>:30080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Home Endpoint",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/"
+      }
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/health"
+      }
+    },
+    {
+      "name": "Version Info",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/version"
+      }
+    }
+  ]
+}
