@@ -43,19 +43,24 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            steps {
-                sh "sed -i 's|IMAGE_PLACEHOLDER|${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml"
-                sh "kubectl apply -f k8s/deployment.yaml --kubeconfig=$KUBECONFIG_CRED"
-                sh "kubectl apply -f k8s/service.yaml --kubeconfig=$KUBECONFIG_CRED"
-                sh "kubectl rollout status deployment/deploy-pipeline-app --kubeconfig=$KUBECONFIG_CRED"
-            }
-        }
+    steps {
+        sh "sed -i 's|IMAGE_PLACEHOLDER|${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml"
+        sh '''
+            echo "$KUBECONFIG_CRED" > /tmp/kubeconfig_jenkins.yaml
+            kubectl apply -f k8s/deployment.yaml --kubeconfig=/tmp/kubeconfig_jenkins.yaml
+            kubectl apply -f k8s/service.yaml --kubeconfig=/tmp/kubeconfig_jenkins.yaml
+            kubectl rollout status deployment/deploy-pipeline-app --kubeconfig=/tmp/kubeconfig_jenkins.yaml
+        '''
+    }
+}
 
         stage('Verify Deployment') {
-            steps {
-                sh "kubectl get pods -l app=deploy-pipeline-app --kubeconfig=$KUBECONFIG_CRED"
-            }
-        }
+    steps {
+        sh '''
+            kubectl get pods -l app=deploy-pipeline-app --kubeconfig=/tmp/kubeconfig_jenkins.yaml
+        '''
+    }
+}
     }
 
     post {
